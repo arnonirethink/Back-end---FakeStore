@@ -18,7 +18,11 @@ const JOICategory = Joi.string().external(
   }
 );
 
-export type Category = string;
+export type Category = {
+  id?: number;
+  category: string;
+};
+
 export type CategoryDB = {
   id: number;
   category: string;
@@ -26,10 +30,15 @@ export type CategoryDB = {
 
 export async function selectCategories() {
   const categoriesDB: CategoryDB[] = await knexInstance("categories").select(
-    "*"
+    "categories.id",
+    "categories.category"
   );
 
-  const categories = categoriesDB.map(({ category }) => category);
+  const categories = categoriesDB.map((category) => ({
+    id: category.id,
+    category: category.category,
+  }));
+
   return categories;
 }
 
@@ -91,13 +100,12 @@ export async function deleteCategory(category: string) {
     affectedProducts.map(async (id) => await deleteProduct(id))
   );
 
-  await knexInstance("categories").where("id", category_id).del()
-  
+  await knexInstance("categories").where("id", category_id).del();
+
   return {
     msg: "Success",
     category: category,
     numProductsAffected: deletedProducts.length,
     productsDeleted: deletedProducts,
   };
-
 }
