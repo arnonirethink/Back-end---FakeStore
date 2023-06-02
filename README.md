@@ -12,6 +12,7 @@
 
 <h2>Tecnologias Utilizadas:</h2>
 <li>Node.js</li>
+<li>TypeScript</li>
 <li>Knex</li>
 <li>Joi</li>
 <li>SQLite</li>
